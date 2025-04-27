@@ -9,12 +9,19 @@ from google.oauth2 import service_account
 import requests
 import tensorflow as tf
 
+# تحقق من وجود متغير البيئة PRIVATE_KEY
+private_key = os.getenv("PRIVATE_KEY")
+if private_key is not None:
+    private_key = private_key.replace("\\n", "\n")
+else:
+    raise ValueError("متغير البيئة PRIVATE_KEY غير مضبوط.")
+
 # إعداد اتصال فايربيس من متغيرات البيئة
 service_account_info = {
     "type": os.getenv("TYPE"),
     "project_id": os.getenv("PROJECT_ID"),
     "private_key_id": os.getenv("PRIVATE_KEY_ID"),
-    "private_key": os.getenv("PRIVATE_KEY").replace("\\n", "\n"),
+    "private_key": private_key,  # استخدم هنا المتغير المعدل
     "client_email": os.getenv("CLIENT_EMAIL"),
     "client_id": os.getenv("CLIENT_ID"),
     "auth_uri": os.getenv("AUTH_URI"),
