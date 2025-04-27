@@ -1,0 +1,22 @@
+# AI/requirements/requirements.txt
+fastapi
+uvicorn[standard]
+google-cloud-firestore
+requests
+tensorflow-lite-runtime   # أو tensorflow إذا لم يتوفر lite
+
+
+
+
+
+
+tensorflow>=2.8
+numpy
+opencv-python
+scikit-learn
+
+pillow
+
+
+
+
