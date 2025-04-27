@@ -1,26 +1,38 @@
-# AI/git/main.py
-
 import os
+import json
 import cv2
 import numpy as np
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from google.cloud import firestore
+from google.oauth2 import service_account
 import requests
 import tensorflow as tf
 
-# 1) تهيئة Firestore بطريقة ذكية
-service_account_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS", "serviceAccount.json")
-db = firestore.Client.from_service_account_json(service_account_path)
+# إعداد اتصال فايربيس من متغيرات البيئة
+service_account_info = {
+    "type": os.getenv("TYPE"),
+    "project_id": os.getenv("PROJECT_ID"),
+    "private_key_id": os.getenv("PRIVATE_KEY_ID"),
+    "private_key": os.getenv("PRIVATE_KEY").replace("\\n", "\n"),
+    "client_email": os.getenv("CLIENT_EMAIL"),
+    "client_id": os.getenv("CLIENT_ID"),
+    "auth_uri": os.getenv("AUTH_URI"),
+    "token_uri": os.getenv("TOKEN_URI"),
+    "auth_provider_x509_cert_url": os.getenv("AUTH_PROVIDER_X509_CERT_URL"),
+    "client_x509_cert_url": os.getenv("CLIENT_X509_CERT_URL"),
+}
 
-# 2) تحميل نموذج TFLite
-model_path = os.getenv("MODEL_PATH", "model.tflite")
-interpreter = tf.lite.Interpreter(model_path=model_path)
+credentials = service_account.Credentials.from_service_account_info(service_account_info)
+db = firestore.Client(credentials=credentials, project=service_account_info["project_id"])
+
+# تحميل نموذج TFLite
+interpreter = tf.lite.Interpreter(model_path="model.tflite")
 interpreter.allocate_tensors()
 input_details = interpreter.get_input_details()
 output_details = interpreter.get_output_details()
 
-# 3) موديلات البيانات
+# موديلات الطلب والاستجابة
 class ItemIn(BaseModel):
     id: str
     imageUrl: str
