@@ -1,10 +1,9 @@
-# AI/requirements/requirements.txt
 fastapi
 uvicorn[standard]
 google-cloud-firestore
-requests 
+requests
 tensorflow>=2.8
 numpy
-opencv-python
+opencv-python-headless
 scikit-learn
 pillow
