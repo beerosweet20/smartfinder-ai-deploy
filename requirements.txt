@@ -2,21 +2,9 @@
 fastapi
 uvicorn[standard]
 google-cloud-firestore
-requests
-tensorflow-lite-runtime   # أو tensorflow إذا لم يتوفر lite
-
-
-
-
-
-
+requests 
 tensorflow>=2.8
 numpy
 opencv-python
 scikit-learn
-
 pillow
-
-
-
-
